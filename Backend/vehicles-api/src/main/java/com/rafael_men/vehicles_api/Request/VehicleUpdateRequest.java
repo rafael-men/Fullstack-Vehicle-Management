@@ -1,16 +1,16 @@
 package com.rafael_men.vehicles_api.Request;
 
 
-public class VehicleUpdateRequest {
+public class VehicleUpdateRequest { // age como um dto para a construção dos métodos do service e controller das entidades
     private String type;
     private String modelo;
     private String cor;
     private String fabricante;
     private Integer ano;
     private Double preco;
-    private Integer quantidadePortas; // Só Carros
-    private String tipoCombustivel;  // Só Carros
-    private Integer cilindrada;      // Só Motos
+    private Integer quantidadePortas; // Só carro
+    private String tipoCombustivel;  // Só carro
+    private Integer cilindrada;      // Só Mmoto
 
 
     public String getType() {

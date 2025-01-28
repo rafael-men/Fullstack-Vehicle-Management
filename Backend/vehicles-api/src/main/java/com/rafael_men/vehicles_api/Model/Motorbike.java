@@ -1,7 +1,7 @@
 package com.rafael_men.vehicles_api.Model;
 
 
-import jakarta.persistence.Column;
+
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import java.util.Objects;

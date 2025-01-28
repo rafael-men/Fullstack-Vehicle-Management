@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/veiculos")
+@RequestMapping("/veiculo")
+@CrossOrigin(origins = "http://localhost:3000")
 public class VehicleController {
 
     @Autowired
@@ -28,12 +29,29 @@ public class VehicleController {
         if (!(veiculo instanceof Car) && !(veiculo instanceof Motorbike)) {
             throw new IllegalArgumentException("Tipo de veículo inválido. Deve ser 'Carro' ou 'Moto'.");
         }
-        if(veiculo instanceof Car) {
+
+        // valida a cilindrada obrigatória para moto
+        if (veiculo instanceof Motorbike) {
+            Motorbike motorbike = (Motorbike) veiculo;
+            if (motorbike.getCilindrada() == null || motorbike.getCilindrada() <= 0) {
+                throw new IllegalArgumentException("A cilindrada é obrigatória para motos.");
+            }
+        }
+
+        if (veiculo instanceof Car) {
+            // valida os atributos obrigatórios do carro
             Car car = (Car) veiculo;
             if (!"Gasolina".equalsIgnoreCase(car.getTipoCombustivel()) &&
                     !"Etanol".equalsIgnoreCase(car.getTipoCombustivel()) &&
+                    !"Diesel".equalsIgnoreCase(car.getTipoCombustivel()) &&
                     !"Flex".equalsIgnoreCase(car.getTipoCombustivel())) {
-                throw new IllegalArgumentException("Tipo de combustível inválido para Carro. Deve ser 'Gasolina', 'Etanol' ou 'Flex'.");
+                throw new IllegalArgumentException("Tipo de combustível inválido para Carro. Deve ser 'Gasolina', 'Etanol','Diesel' ou 'Flex'.");
+            }
+            if(car.getTipoCombustivel() == null) {
+                throw new IllegalArgumentException("Tipo de combustível obrigatório.");
+            }
+            if(car.getQuantidadePortas() == null || car.getQuantidadePortas() == 0) {
+                throw new IllegalArgumentException("Número de portas obrigatório.");
             }
         }
         return service.saveNew(veiculo);
@@ -71,7 +89,6 @@ public class VehicleController {
 
         String tipoVeiculo = vehicleUpdateRequest.getType();
 
-
         if (!"Carro".equalsIgnoreCase(tipoVeiculo) && !"Moto".equalsIgnoreCase(tipoVeiculo)) {
             return "Tipo de veículo inválido. Deve ser 'Carro' ou 'Moto'.";
         }
@@ -86,6 +103,11 @@ public class VehicleController {
                     vehicleUpdateRequest.getQuantidadePortas(),
                     vehicleUpdateRequest.getTipoCombustivel());
         } else if ("Moto".equalsIgnoreCase(tipoVeiculo)) {
+            // verifica se a cilindrada foi fornecida
+            if (vehicleUpdateRequest.getCilindrada() == null || vehicleUpdateRequest.getCilindrada() <= 0) {
+                return "A cilindrada é obrigatória para motos.";
+            }
+
             service.updateMotorbike(id,
                     vehicleUpdateRequest.getModelo(),
                     vehicleUpdateRequest.getCor(),

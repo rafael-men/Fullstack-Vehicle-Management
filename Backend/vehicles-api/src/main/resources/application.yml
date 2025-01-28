@@ -1,8 +1,8 @@
-server:
-  port: 8081
 spring:
   application:
-    name:
+    name: vehicles-api
+
+  # Api
   datasource:
     url: jdbc:postgresql://localhost:5432/backend_db
     username: postgres
@@ -13,6 +13,22 @@ spring:
       dialect: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
 
+---
 
+spring.config.activate.on-profile: dev
 
-
+# Testes
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: update
+      dialect: org.hibernate.dialect.H2Dialect
+    show-sql: true
+  h2:
+    console:
+      enabled: true
