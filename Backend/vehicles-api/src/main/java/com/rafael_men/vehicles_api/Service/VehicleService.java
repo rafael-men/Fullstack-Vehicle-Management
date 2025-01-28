@@ -1,5 +1,6 @@
 package com.rafael_men.vehicles_api.Service;
 
+import com.rafael_men.vehicles_api.Exceptions.VehicleNotFoundException;
 import com.rafael_men.vehicles_api.Model.Car;
 import com.rafael_men.vehicles_api.Model.Motorbike;
 import com.rafael_men.vehicles_api.Model.Vehicle;
@@ -8,10 +9,9 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BindingResult;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class VehicleService {
@@ -116,4 +116,13 @@ public class VehicleService {
         jdbcTemplate.update(sql, modelo, cor, fabricante, ano, preco, cilindrada, id);
     }
 
+    public Vehicle getVehicleById(Long id) {
+        Optional<Vehicle> veiculoOptional = repository.findById(id);
+
+        if (veiculoOptional.isPresent()) {
+            return veiculoOptional.get(); // Retorna o veículo se encontrado
+        } else {
+            throw new VehicleNotFoundException("Veículo não encontrado com o id: " + id); // Lançando exceção se não encontrado
+        }
+    }
 }

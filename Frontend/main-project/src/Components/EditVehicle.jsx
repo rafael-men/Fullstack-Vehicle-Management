@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
-import { createVehicle } from '../Services/Api.js'; 
-import { useNavigate } from 'react-router-dom'; 
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { getVehicleById, updateVehicle } from '../Services/Api'; 
 
-const NewVehicle = () => {
-  const navigate = useNavigate(); 
+const EditVehicle = () => {
+  const { id } = useParams(); 
+  const navigate = useNavigate();
 
   const [vehicleData, setVehicleData] = useState({
     tipo: '',
@@ -19,6 +20,20 @@ const NewVehicle = () => {
 
   const [error, setError] = useState(null);
 
+  // Carregar os dados do veículo ao montar o componente
+  useEffect(() => {
+    const fetchVehicle = async () => {
+      try {
+        const response = await getVehicleById(id);
+        setVehicleData(response.data); 
+      } catch (err) {
+        setError('Erro ao carregar os dados do veículo');
+      }
+    };
+
+    fetchVehicle();
+  }, [id]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setVehicleData({
@@ -30,44 +45,33 @@ const NewVehicle = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
-  
+
     const { tipo, quantidadePortas, tipoCombustivel, cilindrada, ...commonData } = vehicleData;
-  
+
     const vehicleDataToSend = {
       type: tipo,
       ...commonData,
     };
-  
+
     if (tipo === "Carro") {
       vehicleDataToSend.quantidadePortas = quantidadePortas || 0;
       vehicleDataToSend.tipoCombustivel = tipoCombustivel || "N/A";
     } else if (tipo === "Moto") {
       vehicleDataToSend.cilindrada = cilindrada || 0;
     }
-  
-    console.log("Dados enviados para o backend:", vehicleDataToSend); 
-  
+
     try {
-      const response = await createVehicle(vehicleDataToSend);
-      console.log("Veículo cadastrado:", response.data);
-      alert("Veículo cadastrado com sucesso!");
-      navigate("/");
+      await updateVehicle(id, vehicleDataToSend);
+      alert("Veículo atualizado com sucesso!");
+      navigate("/"); 
     } catch (err) {
-      if (err.response) {
-        console.error("Erro no backend:", err.response.data);
-        setError(
-          `Erro: ${err.response.data.message || "Verifique os dados e tente novamente."}`
-        );
-      } else {
-        console.error("Erro desconhecido:", err.message);
-        setError("Erro desconhecido. Tente novamente mais tarde.");
-      }
+      setError('Erro ao atualizar veículo.');
     }
   };
-  
+
   return (
     <div className="max-w-lg mx-auto mt-8 p-6 bg-slate-400 rounded-lg shadow-md mb-10">
-      <h2 className="text-2xl font-semibold text-center">Adicionar Novo Veículo</h2>
+      <h2 className="text-2xl font-semibold text-center">Editar Veículo</h2>
 
       {error && <p className="text-red-500 text-center">{error}</p>}
 
@@ -208,7 +212,7 @@ const NewVehicle = () => {
             type="submit"
             className="bg-blue-950 text-white py-2 px-6 rounded hover:bg-blue-900"
           >
-            Cadastrar Veículo
+            Atualizar Veículo
           </button>
         </div>
       </form>
@@ -216,4 +220,4 @@ const NewVehicle = () => {
   );
 };
 
-export default NewVehicle;
+export default EditVehicle;

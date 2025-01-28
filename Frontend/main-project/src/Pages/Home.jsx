@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import VehicleTable from '../Components/VehicleTable';
-import VehicleFilter from '../Components/VehicleFilter';
 
 const Home = () => {
   return (
@@ -14,9 +13,6 @@ const Home = () => {
         >
           Adicionar Novo Veículo
         </Link>
-      </div>
-      <div className="mb-2 ml-3">
-        
       </div>
       <VehicleTable/>
     </div>

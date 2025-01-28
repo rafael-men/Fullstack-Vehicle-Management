@@ -18,7 +18,7 @@ public class VehicleValidator implements ConstraintValidator<ValidVehicle, Vehic
             return false;
         }
 
-        // Validação para Carro
+        // validação para Carro
         if (vehicle instanceof Car) {
             Car car = (Car) vehicle;
             if (car.getQuantidadePortas() == null || car.getTipoCombustivel() == null) {
@@ -27,7 +27,7 @@ public class VehicleValidator implements ConstraintValidator<ValidVehicle, Vehic
             return true;
         }
 
-        // Validação para Moto
+        // validação para Moto
         if (vehicle instanceof Motorbike) {
             Motorbike motorbike = (Motorbike) vehicle;
             if (motorbike.getCilindrada() == null) {

@@ -7,8 +7,8 @@ import com.rafael_men.vehicles_api.Request.VehicleUpdateRequest;
 import com.rafael_men.vehicles_api.Service.VehicleService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -38,6 +38,8 @@ public class VehicleController {
             }
         }
 
+
+
         if (veiculo instanceof Car) {
             // valida os atributos obrigatórios do carro
             Car car = (Car) veiculo;
@@ -62,6 +64,14 @@ public class VehicleController {
     public List<Vehicle> getAllVehicles() {
         return service.getAllVehicles();
     }
+
+    @Operation(summary = "Obter veículo por id", description = "Retorna o veículo por id.")
+    @GetMapping("/{id}")
+    public ResponseEntity<Vehicle> getVehicleById(@PathVariable Long id) {
+        Vehicle vehicle = service.getVehicleById(id);
+        return ResponseEntity.ok(vehicle);
+    }
+
 
     @GetMapping("/filtrar")
     @Operation(summary = "Filtrar veículos", description = "Filtra veículos por tipo, modelo, cor e ano.")

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { getAllVehicles, deleteVehicle } from '../Services/Api';
+import { getAllVehicles, deleteVehicle,  filterVehicle } from '../Services/Api';
 import { Link } from 'react-router-dom';
 
 const VehicleTable = () => {
   const [vehicles, setVehicles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [filters, setFilters] = useState({ tipo: '', modelo: '', cor: '', ano: '' })
 
   useEffect(() => {
     fetchVehicles();
@@ -19,6 +20,24 @@ const VehicleTable = () => {
       setVehicles(response.data);
     } catch (error) {
       setError('Erro ao buscar veículos. Tente novamente mais tarde.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters({ ...filters, [name]: value });
+  };
+
+  const handleFilterSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const response = await filterVehicle(filters);
+      setVehicles(response.data);
+    } catch (error) {
+      setError('Erro ao filtrar veículos. Tente novamente mais tarde.');
     } finally {
       setLoading(false);
     }
@@ -45,6 +64,49 @@ const VehicleTable = () => {
 
   return (
     <div className="overflow-x-auto shadow-lg rounded-lg">
+       <form
+        onSubmit={handleFilterSubmit}
+        className="mb-6 p-4 bg-slate-600 rounded-lg flex flex-wrap gap-4"
+      >
+        <input
+          type="text"
+          name="tipo"
+          placeholder="Tipo"
+          value={filters.tipo}
+          onChange={handleFilterChange}
+          className="p-2 rounded-md shadow-sm border border-gray-300"
+        />
+        <input
+          type="text"
+          name="modelo"
+          placeholder="Modelo"
+          value={filters.modelo}
+          onChange={handleFilterChange}
+          className="p-2 rounded-md shadow-sm border border-gray-300"
+        />
+        <input
+          type="text"
+          name="cor"
+          placeholder="Cor"
+          value={filters.cor}
+          onChange={handleFilterChange}
+          className="p-2 rounded-md shadow-sm border border-gray-300"
+        />
+        <input
+          type="number"
+          name="ano"
+          placeholder="Ano"
+          value={filters.ano}
+          onChange={handleFilterChange}
+          className="p-2 rounded-md shadow-sm border border-gray-300"
+        />
+        <button
+          type="submit"
+          className="bg-blue-950 text-white px-4 py-2 rounded-md shadow hover:bg-blue-800 transition duration-200"
+        >
+          Filtrar
+        </button>
+      </form>
       <table className="min-w-full bg-slate-500 table-auto">
         <thead className="bg-slate-900">
           <tr>
@@ -67,8 +129,8 @@ const VehicleTable = () => {
               <td className="px-4 py-2 text-sm text-white">{vehicle.ano}</td>
               <td className="px-4 py-2 text-sm text-white">R$ {vehicle.preco.toFixed(2)}</td>
               <td className="px-4 py-2 text-sm text-white">{vehicle.cor || 'N/A'}</td>
-              <td className="px-4 py-2 text-sm text-white">{vehicle.quantidade_portas || 'N/A'}</td>
-              <td className="px-4 py-2 text-sm text-white">{vehicle.tipo_combustivel || 'N/A'}</td>
+              <td className="px-4 py-2 text-sm text-white">{vehicle.quantidadePortas || 'N/A'}</td>
+              <td className="px-4 py-2 text-sm text-white">{vehicle.tipoCombustivel || 'N/A'}</td>
               <td className="px-4 py-2 text-sm text-white">{vehicle.cilindrada || 'N/A'}</td>
               <td className="px-4 py-2 text-center text-sm">
              
