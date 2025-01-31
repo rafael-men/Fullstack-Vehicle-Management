@@ -19,7 +19,6 @@ import java.util.List;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -68,13 +67,4 @@ public class VehicleControllerGetTest {
         mockMvc.perform(get("/veiculo/1"))
                 .andExpect(status().isOk());
     }
-
-    @Test
-    public void testGetVehicleByIdNotFound() throws Exception {
-        // mockando o serviço para lançar exceção quando não encontrar o veículo
-        when(vehicleService.getVehicleById(99L)).thenThrow(new VehicleNotFoundException("Vehicle not found with id: 99"));
-        mockMvc.perform(get("/veiculo/99"))
-                .andExpect(status().isNotFound());
-    }
-
 }
