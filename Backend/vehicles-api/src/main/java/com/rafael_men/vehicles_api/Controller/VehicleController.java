@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/veiculo")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "https://fullstack-vehicle-management-frontend.vercel.app")
 public class VehicleController {
 
     @Autowired
