@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:8080/veiculo',
+  baseURL: 'https://fullstack-vehicle-management-backend.onrender.com/veiculo',
 });
 
 export const getAllVehicles = () => api.get();
