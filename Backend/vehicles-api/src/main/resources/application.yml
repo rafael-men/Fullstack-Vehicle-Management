@@ -7,6 +7,7 @@ spring:
     url: jdbc:postgresql://postgres:5432/backend_db
     username: postgres
     password: senha
+    driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
       ddl-auto: validate
