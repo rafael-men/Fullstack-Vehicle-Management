@@ -13,6 +13,8 @@ services:
       SPRING_DATASOURCE_PASSWORD: senha
     depends_on:
       - postgres
+    networks:
+      - rafa-net
 
   postgres:
     image: postgres:15.4
@@ -24,6 +26,12 @@ services:
       POSTGRES_DB: backend_db
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - rafa-net
 
 volumes:
   postgres_data:
+
+networks:
+  rafa-net:
+    driver: bridge
