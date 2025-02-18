@@ -8,9 +8,9 @@ services:
     ports:
       - "8080:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/backend_db
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: senha
+      SPRING_DATASOURCE_URL: jdbc:postgresql://dpg-cuqeqb9opnds73cs3ng0-a.oregon-postgres.render.com:5432/backend_db_drr2
+      SPRING_DATASOURCE_USERNAME: vehicles_user
+      SPRING_DATASOURCE_PASSWORD: pfnd1gr2hx4xtji1AAPODkmIjHNWIQ2b
     depends_on:
       - postgres
     networks:
@@ -21,9 +21,9 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: senha
-      POSTGRES_DB: backend_db
+      POSTGRES_USER: vehicles_user
+      POSTGRES_PASSWORD: pfnd1gr2hx4xtji1AAPODkmIjHNWIQ2b
+      POSTGRES_DB: backend_db_drr2
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
